@@ -24,7 +24,7 @@ public:
     void Skillfour(int num);
     void Delete1(int x,int y,int num);
     void Delete2(int x, int y,int num);
-    void Judge();
+    bool Judge();
     void fall();
     //virtual void Skill();
     int Num=0;
@@ -40,8 +40,9 @@ private slots:
 
 private:
     Ui::play *ui;
-    //QLabel *fruit;
     QPushButton *fruit;
+    QString nor="QPushButton{background-color: rgb(255, 170, 0);border:2px solid black;border-radius: 10px;}";
+    QString sel="QPushButton{background-color: rgb(255, 0, 0);border:2px solid black;border-radius: 10px;}";
 };
 
 #endif // PLAY_H

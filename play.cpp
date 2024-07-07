@@ -36,10 +36,9 @@ void play::draw()
     for(int i=0;i<7;i++)
         for(int j=0;j<7;j++)
         {
-            QString path="D:\\GitHubRemoteRepositories\\MatchMaking\\rc\\";
+            QString path=":/rc/";
             path+=QString::number(matrix[i][j]);
             path+=".png";
-            //fruit[i*7+j].setPixmap(QPixmap(path));
             fruit[i*7+j].setIcon(QIcon(path));
             fruit[i*7+j].setIconSize(QSize(70,70));
             ui->Grid->addWidget(&fruit[i*7+j], j, i);
@@ -61,7 +60,7 @@ void play::swap(int i)
 {
     if(Selected==-1)
     {
-        //fruit[i].setIconSize(QSize(80,80));
+        fruit[i].setStyleSheet(sel);
         Selected=i;
     }
     else
@@ -69,7 +68,7 @@ void play::swap(int i)
         int sx=Selected/7,sy=Selected%7,ix=i/7,iy=i%7;
         if(sx==ix&&sy==iy)
         {
-            //fruit[i].setIconSize(QSize(70,70));
+            fruit[Selected].setStyleSheet(nor);
             Selected=-1;
         }
         else if(abs(sx-ix)+abs(sy-iy)==1)
@@ -77,13 +76,19 @@ void play::swap(int i)
             int tem=matrix[sx][sy];
             matrix[sx][sy]=matrix[ix][iy];
             matrix[ix][iy]=tem;
+            fruit[Selected].setStyleSheet(nor);
             Selected=-1;
-            Judge();
+            if(Judge())
+            {
+                matrix[ix][iy]=matrix[sx][sy];
+                matrix[sx][sy]=tem;
+            }
             draw();
         }
         else
         {
-            //fruit[i].setIconSize(QSize(80,80));
+            fruit[i].setStyleSheet(sel);
+            fruit[Selected].setStyleSheet(nor);
             Selected=i;
         }
     }
@@ -336,7 +341,7 @@ void play:: Delete2(int x, int y,int num)
     }
     fall();
 }
-void play:: Judge()
+bool play:: Judge()
 {
     for(int i=0;i<7;i++)
         for(int j=0;j<5;j++)
@@ -345,6 +350,7 @@ void play:: Judge()
                 if(matrix[i][j]!=20&&matrix[i][j+1]!=20&&matrix[i][j+2]!=20)
                 {
                     Delete2(i,j+1,matrix[i][j]%5);
+                    return false;
                 }
             }
     for(int j=0;j<7;j++)
@@ -354,8 +360,10 @@ void play:: Judge()
                 if(matrix[i][j]!=20&&matrix[i+1][j]!=20&&matrix[i+2][j]!=20)
                 {
                     Delete1(i+1,j,matrix[i][j]%5);
+                    return false;
                 }
             }
+    return true;
 }
 void play::fall()
 {

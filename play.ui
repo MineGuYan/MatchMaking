@@ -26,7 +26,21 @@
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true"/>
+   <string notr="true">QPushButton{
+background-color: rgb(255, 170, 0);
+border:2px solid black;
+border-radius: 10px;
+}
+QPushButton:hover{
+background-color: rgb(92, 176, 255);
+border:2px solid black;
+border-radius: 10px;
+}
+QPushButton:pressed{
+background-color: rgb(85, 255, 127);
+border:2px solid black;
+border-radius: 10px;
+}</string>
   </property>
   <widget class="QWidget" name="gridLayoutWidget">
    <property name="geometry">

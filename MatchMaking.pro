@@ -14,14 +14,24 @@ SOURCES += \
     mainmenu.cpp \
     network.cpp \
     play.cpp \
-    server.cpp
+    server.cpp \
+    skill0.cpp \
+    skill1.cpp \
+    skill2.cpp \
+    skill3.cpp \
+    skill4.cpp
 
 HEADERS += \
     client.h \
     mainmenu.h \
     network.h \
     play.h \
-    server.h
+    server.h \
+    skill0.h \
+    skill1.h \
+    skill2.h \
+    skill3.h \
+    skill4.h
 
 FORMS += \
     client.ui \

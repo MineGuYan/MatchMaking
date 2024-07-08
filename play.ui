@@ -6,19 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>960</width>
+    <width>1280</width>
     <height>720</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>960</width>
+    <width>1280</width>
     <height>720</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>960</width>
+    <width>1280</width>
     <height>720</height>
    </size>
   </property>
@@ -27,31 +27,31 @@
   </property>
   <property name="styleSheet">
    <string notr="true">QPushButton{
-background-color: rgb(255, 170, 0);
-border:2px solid black;
+background-color: transparent;
 border-radius: 10px;
 }
 QPushButton:hover{
-background-color: rgb(92, 176, 255);
+background-color: transparent;
 border:2px solid black;
 border-radius: 10px;
 }
 QPushButton:pressed{
 background-color: rgb(85, 255, 127);
-border:2px solid black;
 border-radius: 10px;
 }</string>
   </property>
-  <widget class="QWidget" name="gridLayoutWidget">
+  <widget class="QLabel" name="bg">
    <property name="geometry">
     <rect>
-     <x>170</x>
-     <y>50</y>
-     <width>621</width>
-     <height>611</height>
+     <x>0</x>
+     <y>0</y>
+     <width>1280</width>
+     <height>720</height>
     </rect>
    </property>
-   <layout class="QGridLayout" name="Grid"/>
+   <property name="text">
+    <string/>
+   </property>
   </widget>
  </widget>
  <resources/>

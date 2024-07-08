@@ -22,5 +22,6 @@
         <file>rc/19.png</file>
         <file>rc/20.png</file>
         <file>rc/icon.ico</file>
+        <file>rc/bg.png</file>
     </qresource>
 </RCC>

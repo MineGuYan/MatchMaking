@@ -7,11 +7,12 @@ play::play(QWidget *parent)
 {
     ui->setupUi(this);
     this->setWindowTitle("小鸟消消乐");
-    //fruit=new QLabel[49];
+    ui->bg->setPixmap(QPixmap(":/rc/bg.png"));
     fruit=new QPushButton[49];
     srand(time(0));
     for(int index=0;index<49;index++)
     {
+        fruit[index].setParent(this);
         auto func = std::bind(&play::swap, this, index);
         connect(&fruit[index], &QPushButton::clicked, func);
     }
@@ -41,7 +42,7 @@ void play::draw()
             path+=".png";
             fruit[i*7+j].setIcon(QIcon(path));
             fruit[i*7+j].setIconSize(QSize(70,70));
-            ui->Grid->addWidget(&fruit[i*7+j], j, i);
+            fruit[i*7+j].move(360+i*80,80+j*80);
         }
 }
 
@@ -149,7 +150,7 @@ void play:: Skilltwo(int x)
 }
 void play::Skillthree(int x,int y)
 {
-    for(int i=x-1;i<=x+1;i++)
+    for(int i=(x-1>0?x-1:0);i<=(x+1>6?6:x+1);i++)
     {
         for(int j=y-1;j<y+1;j++)
         {
@@ -350,7 +351,7 @@ bool play:: Judge()
                 if(matrix[i][j]!=20&&matrix[i][j+1]!=20&&matrix[i][j+2]!=20)
                 {
                     Delete2(i,j+1,matrix[i][j]%5);
-                    return false;
+                       return false;
                 }
             }
     for(int j=0;j<7;j++)
@@ -367,6 +368,7 @@ bool play:: Judge()
 }
 void play::fall()
 {
+    draw();
     for (int i = 0; i < 7; i++)
     {
         for (int j = 6; j >= 0; j--)
@@ -379,11 +381,13 @@ void play::fall()
                     {
                         matrix[i][p] = matrix[i][p-1];
                     }
-                    matrix[i][0] = rand()%5;
+                    matrix[i][0] = rand()%5;                    
                     j++;
+                    draw();
                 }
                 else {
                     matrix[i][0] = rand()%5;
+                    draw();
                 }
             }
         }

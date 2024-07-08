@@ -186,42 +186,137 @@ void play::Skillthree(int x,int y)
     }
 }
 
-void play:: Delete1(int x,int y,int num)
+int play::Judgecolumn(int x,int y,int num)
 {
-    int startx = x;
-    int number = 0;
-    while (startx >= 0)
-    {
-        if (matrix[startx][y]%5 == num&&matrix[startx][y]!=20)
+    int columnNum=0;
+    int starty;
+    int flag=0;
+    if(y!=0){
+        starty=y-1;
+        while(starty>=0)
         {
-            number++;
-            if(matrix[startx][y]<5)
+            if(matrix[x][starty]%5==num&&matrix[x][starty]!=20)
+                columnNum++;
+            else break;
+            starty--;
+        }
+    }
+    if(y!=6)
+    {
+        starty=y+1;
+        while(starty<=6)
+        {
+            if(matrix[x][starty]%5==num&&matrix[x][starty]!=20)
+                columnNum++;
+            else break;
+            starty++;
+        }
+    }
+    if(columnNum>=2)
+    {
+        flag=1;
+        if(y!=0){
+            starty=y-1;
+            while(starty>=0)
             {
-                if(matrix[startx][y]==People)Num++;
-                matrix[startx][y] = -1;
+                if(matrix[x][starty]%5==num&&matrix[x][starty]!=20)
+                {
+                    matrix[x][starty]=-1;
+                    if(num==People)Num++;
+                }
+                else break;
+                starty--;
             }
-            else if ((matrix[startx][y] - num) / 5 == 1)
+        }
+        if(y!=6)
+        {
+            starty=y+1;
+            while(starty<=6)
             {
-                Skillone(y);
+                if(matrix[x][starty]%5==num&&matrix[x][starty]!=20)
+                {
+                    matrix[x][starty]=-1;
+                    if(num==People)Num++;
+                }
+                else break;
+                starty++;
             }
-            else if ((matrix[startx][y] - num) / 5 == 2)
-            {
-                Skilltwo(startx);
-            }
-            else if((matrix[startx][y] - num) / 5 == 3)
-            {
-                Skillthree(startx,y);
-            }
+        }
+    }
+    return flag;
+}
+
+int play::Judgerow(int x,int y,int num)
+{
+    int rowNum=0;
+    int startx;
+    int flag=0;
+    if(x!=0){
+        startx=x-1;
+        while(startx>=0)
+        {
+            if(matrix[startx][y]%5==num&&matrix[startx][y]!=20)
+                rowNum++;
+            else break;
             startx--;
         }
-        else break;
     }
-    startx = x + 1;
+    if(x!=6)
+    {
+        startx=x+1;
+        while(startx<=6)
+        {
+            if(matrix[startx][y]%5==num&&matrix[startx][y]!=20)
+                rowNum++;
+            else break;
+            startx++;
+        }
+    }
+    if(rowNum>=2)
+    {
+        flag=1;
+        if(x!=0){
+            startx=x-1;
+            while(startx>=0)
+            {
+                if(matrix[startx][y]%5==num&&matrix[startx][y]!=20)
+                {
+                    matrix[startx][y]=-1;
+                    if(num==People)Num++;
+                }
+                else break;
+                startx--;
+            }
+        }
+        if(x!=6)
+        {
+            startx=x+1;
+            while(startx<=6)
+            {
+                if(matrix[startx][y]%5==num&&matrix[startx][y]!=20)
+                {
+                    matrix[startx][y]=-1;
+                    if(num==People)Num++;
+                }
+                else break;
+                startx++;
+            }
+        }
+    }
+    return flag;
+}
+
+void play:: Delete1(int x,int y,int num)
+{
+    int startx = x-1;
+    int number = 0;
+    int flag=0;//判断列的
     while (startx <= 6)
     {
         if (matrix[startx][y]%5 == num&&matrix[startx][y]!=20)
         {
             number++;
+            flag+=Judgecolumn(startx,y,num);
             if(matrix[startx][y]<5)
             {
                 if(matrix[startx][y]==People)Num++;
@@ -245,22 +340,12 @@ void play:: Delete1(int x,int y,int num)
     }
     if(number==3)
     {
-        if(matrix[x][y-1]%5==num&&matrix[x][y+1]%5==num)
-        {
-            matrix[x][y]=num+15;
-            matrix[x][y-1]=-1;
-            matrix[x][y+1]=-1;
-        }
+        if(flag>=1)matrix[x][y]=num+15;
     }
     else if (number == 4)
     {
-        if(matrix[x][y-1]%5==num&&matrix[x][y+1]%5==num)
-        {
-            matrix[x][y]=20;
-            matrix[x][y-1]=-1;
-            matrix[x][y+1]=-1;
-        }
-        else matrix[x][y] = num + 10;
+        if(flag>=1)matrix[x][y]=num+15;
+        else matrix[x][y]=num+10;
     }
     else if (number >= 5)
     {
@@ -268,42 +353,18 @@ void play:: Delete1(int x,int y,int num)
     }
     fall();
 }
+
 void play:: Delete2(int x, int y,int num)
 {
-    int starty = y;
+    int starty = y-1;
     int number = 0;
-    while (starty >= 0)
-    {
-        if (matrix[x][starty]%5 == num&&matrix[x][starty]!=20)
-        {
-            number++;
-            if(matrix[x][starty]<5)
-            {
-                if(matrix[x][starty]==People)Num++;
-                matrix[x][starty] = -1;
-            }
-            else if ((matrix[x][starty] - num) / 5 == 1)
-            {
-                Skillone(starty);
-            }
-            else if ((matrix[x][starty] - num) / 5 == 2)
-            {
-                Skilltwo(x);
-            }
-            else if((matrix[x][starty] - num) / 5 == 3)
-            {
-                Skillthree(x,starty);
-            }
-            starty--;
-        }
-        else break;
-    }
-    starty = y + 1;
+    int flag=0;//判断行的
     while (starty <= 6)
     {
         if (matrix[x][starty]%5 == num&&matrix[x][starty]!=20)
         {
             number++;
+            flag+=Judgerow(x,starty,num);
             if(matrix[x][starty]<5)
             {
                 if(matrix[x][starty]==People)Num++;
@@ -327,22 +388,12 @@ void play:: Delete2(int x, int y,int num)
     }
     if(number==3)
     {
-        if(matrix[x-1][y]%5==num&&matrix[x+1][y]%5==num)
-        {
-            matrix[x][y]=num+15;
-            matrix[x-1][y]=-1;
-            matrix[x+1][y]=-1;
-        }
+        if(flag>=1)matrix[x][y]=num+15;
     }
     else if (number == 4)
     {
-        if(matrix[x-1][y]%5==num&&matrix[x+1][y]%5==num)
-        {
-            matrix[x][y]=20;
-            matrix[x-1][y]=-1;
-            matrix[x+1][y]=-1;
-        }
-        else matrix[x][y] = num + 5;
+        if(flag>=1)matrix[x][y]=num+15;
+        else matrix[x][y]=num+5;
     }
     else if (number >= 5)
     {
@@ -350,6 +401,7 @@ void play:: Delete2(int x, int y,int num)
     }
     fall();
 }
+
 bool play:: Judge()
 {
     for(int i=0;i<7;i++)

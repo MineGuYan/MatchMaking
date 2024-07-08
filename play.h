@@ -26,6 +26,8 @@ public:
     void Delete1(int x,int y,int num);
     void Delete2(int x, int y,int num);
     bool Judge();
+    int Judgecolumn(int x, int y,int num);
+    int Judgerow(int x, int y,int num);
     void fall();
     //virtual void Skill();
     int Num=0;

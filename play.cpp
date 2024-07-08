@@ -108,7 +108,7 @@ void play::Skillone(int y)
 {
     for (int i = 0; i < 7; i++)
     {
-        if(matrix[i][y]==People&&matrix[i][y]!=20)Num++;
+        if(matrix[i][y]%5==People&&matrix[i][y]!=20)Num++;
         if(matrix[i][y]<5)
         {
             matrix[i][y] = -1;
@@ -134,7 +134,7 @@ void play:: Skilltwo(int x)
 {
     for (int j = 0; j < 7; j++)
     {
-        if(matrix[x][j]==People&&matrix[x][j]!=20)Num++;
+        if(matrix[x][j]%5==People&&matrix[x][j]!=20)Num++;
         if(matrix[x][j]<5)
         {
             matrix[x][j] = -1;
@@ -159,10 +159,9 @@ void play:: Skilltwo(int x)
 void play::Skillthree(int x,int y)
 {
     for(int i=(x-1>0?x-1:0);i<=(x+1>6?6:x+1);i++)
-    {
         for(int j=(y-1>0?y-1:0);j<(y+1>6?6:y+1);j++)
         {
-            if(matrix[i][j]==People&&matrix[i][j]!=20)Num++;
+            if(matrix[i][j]%5==People&&matrix[i][j]!=20)Num++;
             if(matrix[i][j]<5)
             {
                 matrix[i][j] = -1;
@@ -177,13 +176,12 @@ void play::Skillthree(int x,int y)
                 matrix[i][j] = -1;
                 Skilltwo(i);
             }
-            else if(matrix[i][j]/5==3)
+            else if (matrix[i][j] / 5 == 3)
             {
                 matrix[i][j] = -1;
                 Skillthree(i,j);
             }
         }
-    }
 }
 
 int play::Judgecolumn(int x,int y,int num)

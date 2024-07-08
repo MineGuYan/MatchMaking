@@ -6,7 +6,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include <functional>
-//#include <QThread>
+#include <QTest>
 namespace Ui {
 class play;
 }
@@ -44,7 +44,6 @@ private:
     QPushButton *fruit;
     QString nor="QPushButton{background-color: transparent;border-radius: 10px;}";
     QString sel="QPushButton{background-color: rgb(85, 255, 127);border-radius: 10px;}";
-    //rgb(255, 170, 0)
 };
 
 #endif // PLAY_H

@@ -5,16 +5,16 @@ play::play(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::play)
 {
-    ui->setupUi(this);
+    srand(time(0));
+    ui->setupUi(this);   
     this->setWindowTitle("小鸟消消乐");
     ui->bg->setPixmap(QPixmap(":/rc/bg.png"));
     fruit=new QPushButton[49];
-    srand(time(0));
-    for(int index=0;index<49;index++)
+    for(int i=0;i<49;i++)
     {
-        fruit[index].setParent(this);
-        auto func = std::bind(&play::swap, this, index);
-        connect(&fruit[index], &QPushButton::clicked, func);
+        fruit[i].setParent(this);
+        auto func = std::bind(&play::swap, this, i);
+        connect(&fruit[i], &QPushButton::clicked, func);
     }
     do
     {
@@ -23,7 +23,6 @@ play::play(QWidget *parent)
                 matrix[i][j]=rand()%5;
     }while(judgeStart());
     draw();
-
 }
 
 play::~play()
@@ -44,6 +43,8 @@ void play::draw()
             fruit[i*7+j].setIconSize(QSize(70,70));
             fruit[i*7+j].move(360+i*80,80+j*80);
         }
+    this->repaint();
+    QTest::qSleep(100);
 }
 
 bool play::judgeStart()
@@ -78,7 +79,15 @@ void play::swap(int i)
             matrix[sx][sy]=matrix[ix][iy];
             matrix[ix][iy]=tem;
             fruit[Selected].setStyleSheet(nor);
-            Selected=-1;
+            int vectorx=ix-sx,vectory=iy-sy;
+            for(int Distance=1;Distance<=40;Distance++)
+            {
+                fruit[i].move(360+ix*80-Distance*vectorx*2,80+iy*80-Distance*vectory*2);
+                fruit[Selected].move(360+sx*80+Distance*vectorx*2,80+sy*80+Distance*vectory*2);
+                this->repaint();
+            }
+
+            Selected=-1;            
             if(Judge())
             {
                 matrix[ix][iy]=matrix[sx][sy];
@@ -94,7 +103,6 @@ void play::swap(int i)
         }
     }
 }
-
 
 void play::Skillone(int y)
 {
@@ -152,7 +160,7 @@ void play::Skillthree(int x,int y)
 {
     for(int i=(x-1>0?x-1:0);i<=(x+1>6?6:x+1);i++)
     {
-        for(int j=y-1;j<y+1;j++)
+        for(int j=(y-1>0?y-1:0);j<(y+1>6?6:y+1);j++)
         {
             if(matrix[i][j]==People&&matrix[i][j]!=20)Num++;
             if(matrix[i][j]<5)

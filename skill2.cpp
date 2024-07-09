@@ -15,5 +15,6 @@ skill2::skill2()
             }
             else matrix[x][y]=matrix[x][y]%5+10;
         }
+        Num-=6;
     }
 }

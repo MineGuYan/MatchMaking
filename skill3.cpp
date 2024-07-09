@@ -8,5 +8,6 @@ skill3::skill3()
         int y=rand()%7;
         Skillone(y);
         Skilltwo(x);
+        fall();
     }
 }

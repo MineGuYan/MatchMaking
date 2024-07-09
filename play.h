@@ -21,7 +21,7 @@ public:
 
     void Skillone(int y);
     void Skilltwo(int x);
-    void Skillthree(int x,int y);
+    void Skillthree(int x,int y,int r=1);
     void Skillfour(int num);
     void Delete1(int x,int y,int num);
     void Delete2(int x, int y,int num);
@@ -32,6 +32,7 @@ public:
     //virtual void Skill();
     int Num=0;
     int People=0;
+    int Score=0;
 
     void draw();
     bool judgeStart();

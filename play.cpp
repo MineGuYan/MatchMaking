@@ -41,7 +41,7 @@ void play::draw()
             path+=".png";
             fruit[i*7+j].setIcon(QIcon(path));
             fruit[i*7+j].setIconSize(QSize(70,70));
-            fruit[i*7+j].move(360+i*80,80+j*80);
+            fruit[i*7+j].move(365+i*80,85+j*80);
         }
     this->repaint();
     QTest::qSleep(100);
@@ -82,17 +82,73 @@ void play::swap(int i)
             int vectorx=ix-sx,vectory=iy-sy;
             for(int Distance=1;Distance<=40;Distance++)
             {
-                fruit[i].move(360+ix*80-Distance*vectorx*2,80+iy*80-Distance*vectory*2);
-                fruit[Selected].move(360+sx*80+Distance*vectorx*2,80+sy*80+Distance*vectory*2);
+                fruit[i].move(365+ix*80-Distance*vectorx*2,85+iy*80-Distance*vectory*2);
+                fruit[Selected].move(365+sx*80+Distance*vectorx*2,85+sy*80+Distance*vectory*2);
                 this->repaint();
             }
 
-            Selected=-1;            
-            if(Judge())
+            if((matrix[sx][sy]>=5&&matrix[ix][iy]>=5)||matrix[sx][sy]==20||matrix[ix][iy]==20)
+            {
+                int x=matrix[sx][sy]>matrix[ix][iy]?matrix[ix][iy]:matrix[sx][sy];
+                int S=matrix[sx][sy]/5,I=matrix[ix][iy]/5;
+                matrix[ix][iy]=-1;
+                matrix[sx][sy]=-1;
+                if(S==1&&I==1)
+                {
+                    Skillone(iy);
+                    Skillone(sy);
+                }
+                else if(S==2&&I==2)
+                {
+                    Skilltwo(ix);
+                    Skilltwo(sx);
+                }
+                else if(S==3&&I==3)
+                {
+                    Skillthree(ix,iy,2);
+                }
+                else if(S==4||I==4)
+                {
+                    Skillfour(x);
+                }
+                else if(S==1&&I==2)
+                {
+                    Skilltwo(ix);
+                    Skillone(sy);
+                }
+                else if(S==2&&I==1)
+                {
+                    Skilltwo(sx);
+                    Skillone(iy);
+                }
+                else if(S==1&&I==3)
+                {
+                    for(int j=(sy-1>0?sy-1:0);j<=(sy+1>6?6:sy+1);j++)
+                        Skillone(j);
+                }
+                else if(S==3&&I==1)
+                {
+                    for(int j=(iy-1>0?iy-1:0);j<=(iy+1>6?6:iy+1);j++)
+                        Skillone(j);
+                }
+                else if(S==2&&I==3)
+                {
+                    for(int j=(sx-1>0?sx-1:0);j<=(sx+1>6?6:sx+1);j++)
+                        Skilltwo(j);
+                }
+                else if(S==3&&I==2)
+                {
+                    for(int j=(ix-1>0?ix-1:0);j<=(ix+1>6?6:ix+1);j++)
+                        Skilltwo(j);
+                }
+                fall();
+            }
+            else if(Judge())
             {
                 matrix[ix][iy]=matrix[sx][sy];
                 matrix[sx][sy]=tem;
             }
+            Selected=-1;
             draw();
         }
         else
@@ -130,6 +186,7 @@ void play::Skillone(int y)
         }
     }
 }
+
 void play:: Skilltwo(int x)
 {
     for (int j = 0; j < 7; j++)
@@ -156,10 +213,11 @@ void play:: Skilltwo(int x)
         }
     }
 }
-void play::Skillthree(int x,int y)
+
+void play::Skillthree(int x,int y,int r)
 {
-    for(int i=(x-1>0?x-1:0);i<=(x+1>6?6:x+1);i++)
-        for(int j=(y-1>0?y-1:0);j<(y+1>6?6:y+1);j++)
+    for(int i=(x-r>0?x-r:0);i<=(x+r>6?6:x+r);i++)
+        for(int j=(y-r>0?y-r:0);j<(y+r>6?6:y+r);j++)
         {
             if(matrix[i][j]%5==People&&matrix[i][j]!=20)Num++;
             if(matrix[i][j]<5)
@@ -182,6 +240,198 @@ void play::Skillthree(int x,int y)
                 Skillthree(i,j);
             }
         }
+}
+
+void play::Skillfour(int num)
+{
+    if (num >= 0 && num < 5)
+    {
+        Score += 15;
+        for (int i = 0; i < 7; i++)
+        {
+            for (int j = 0; j < 7; j++)
+            {
+                if (matrix[i][j] % 5 == People && matrix[i][j] != 20)Num++;
+                if (matrix[i][j] >= 0 && matrix[i][j] % 5 == num % 5 && matrix[i][j] != 20)
+                {
+                    if (matrix[i][j] < 5)
+                    {
+                        matrix[i][j] = -1;
+                        Score++;
+                    }
+                    else if (matrix[i][j] / 5 == 1)
+                    {
+                        matrix[i][j] = -1;
+                        Score += 6;
+                        Skillone(j);
+                    }
+                    else if (matrix[i][j] / 5 == 2)
+                    {
+                        matrix[i][j] = -1;
+                        Score += 6;
+                        Skilltwo(i);
+                    }
+                    else if (matrix[i][j] / 5 == 3)
+                    {
+                        matrix[i][j] = -1;
+                        Score += 6;
+                        Skillthree(i, j);
+                    }
+                }
+            }
+        }
+    }
+    else if (num >= 5 && num < 10)
+    {
+        Score += 15;
+        for (int i = 0; i < 7; i++)
+        {
+            for (int j = 0; j < 7; j++)
+            {
+                if (matrix[i][j] % 5 == People && matrix[i][j] != 20)Num++;
+                if (matrix[i][j] >= 0&&matrix[i][j] % 5 == num % 5 &&matrix[i][j]!=20)
+                {
+                    if (matrix[i][j] < 5)
+                    {
+                        matrix[i][j] = -1;
+                        Score+=6;
+                        Skillone(j);
+                    }
+                    else if (matrix[i][j] / 5 == 1)
+                    {
+                        matrix[i][j] = -1;
+                        Score += 6;
+                        Skillone(j);
+                    }
+                    else if (matrix[i][j] / 5 == 2)
+                    {
+                        matrix[i][j] = -1;
+                        Score += 6;
+                        Skilltwo(i);
+                    }
+                    else if (matrix[i][j] / 5 == 3)
+                    {
+                        matrix[i][j] = -1;
+                        Score += 6;
+                        Skillthree(i, j);
+                    }
+                }
+            }
+        }
+    }
+    else if (num >= 10 && num < 15)
+    {
+        Score += 15;
+        for (int i = 0; i < 7; i++)
+        {
+            for (int j = 0; j < 7; j++)
+            {
+                if (matrix[i][j] % 5 == People && matrix[i][j] != 20)Num++;
+                if (matrix[i][j] >= 0 && matrix[i][j] % 5 == num % 5 && matrix[i][j] != 20)
+                {
+                    if (matrix[i][j] < 5)
+                    {
+                        matrix[i][j] = -1;
+                        Score += 6;
+                        Skilltwo(i);
+                    }
+                    else if (matrix[i][j] / 5 == 1)
+                    {
+                        matrix[i][j] = -1;
+                        Score += 6;
+                        Skillone(j);
+                    }
+                    else if (matrix[i][j] / 5 == 2)
+                    {
+                        matrix[i][j] = -1;
+                        Score += 6;
+                        Skilltwo(i);
+                    }
+                    else if (matrix[i][j] / 5 == 3)
+                    {
+                        matrix[i][j] = -1;
+                        Score += 6;
+                        Skillthree(i, j);
+                    }
+                }
+            }
+        }
+    }
+    else if (num >= 15 && num < 20)
+    {
+        Score += 15;
+        for (int i = 0; i < 7; i++)
+        {
+            for (int j = 0; j < 7; j++)
+            {
+                if (matrix[i][j] % 5 == People && matrix[i][j] != 20)Num++;
+                if (matrix[i][j] >= 0 && matrix[i][j] % 5 == num % 5 && matrix[i][j] != 20)
+                {
+                    if (matrix[i][j] < 5)
+                    {
+                        matrix[i][j] = -1;
+                        Score += 6;
+                        Skillthree(i,j);
+                    }
+                    else if (matrix[i][j] / 5 == 1)
+                    {
+                        matrix[i][j] = -1;
+                        Score += 6;
+                        Skillone(j);
+                    }
+                    else if (matrix[i][j] / 5 == 2)
+                    {
+                        matrix[i][j] = -1;
+                        Score += 6;
+                        Skilltwo(i);
+                    }
+                    else if (matrix[i][j] / 5 == 3)
+                    {
+                        matrix[i][j] = -1;
+                        Score += 6;
+                        Skillthree(i, j);
+                    }
+                }
+            }
+        }
+    }
+    else if (num==20)
+    {
+        Score += 50;
+        for (int i = 0; i < 7; i++)
+        {
+            for (int j = 0; j < 7; j++)
+            {
+                if (matrix[i][j] % 5 == People && matrix[i][j] != 20)Num++;
+                if (matrix[i][j] >= 0 && matrix[i][j] % 5 == num % 5 && matrix[i][j] != 20)
+                {
+                    if (matrix[i][j] < 5)
+                    {
+                        matrix[i][j] = -1;
+                        Score ++;
+                    }
+                    else if (matrix[i][j] / 5 == 1)
+                    {
+                        matrix[i][j] = -1;
+                        Score += 6;
+                        Skillone(j);
+                    }
+                    else if (matrix[i][j] / 5 == 2)
+                    {
+                        matrix[i][j] = -1;
+                        Score += 6;
+                        Skilltwo(i);
+                    }
+                    else if (matrix[i][j] / 5 == 3)
+                    {
+                        matrix[i][j] = -1;
+                        Score += 6;
+                        Skillthree(i, j);
+                    }
+                }
+            }
+        }
+    }
 }
 
 int play::Judgecolumn(int x,int y,int num)

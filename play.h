@@ -32,6 +32,7 @@ public:
     //virtual void Skill();
     int Num=0;
     int People=0;
+    int Score=0;
 
     void draw();
     bool judgeStart();

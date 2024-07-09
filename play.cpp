@@ -630,18 +630,25 @@ void play:: Delete1(int x,int y,int num)
             if(matrix[startx][y]<5)
             {
                 if(matrix[startx][y]==People)Num++;
+                Score++;
                 matrix[startx][y] = -1;
             }
             else if ((matrix[startx][y] - num) / 5 == 1)
             {
+                matrix[startx][y] = -1;
+                Score++;
                 Skillone(y);
             }
             else if ((matrix[startx][y] - num) / 5 == 2)
             {
+                matrix[startx][y] = -1;
+                Score++;
                 Skilltwo(startx);
             }
             else if((matrix[startx][y] - num) / 5 == 3)
             {
+                matrix[startx][y] = -1;
+                Score++;
                 Skillthree(startx,y);
             }
             startx++;
@@ -679,18 +686,25 @@ void play:: Delete2(int x, int y,int num)
             if(matrix[x][starty]<5)
             {
                 if(matrix[x][starty]==People)Num++;
+                Score++;
                 matrix[x][starty] = -1;
             }
             else if ((matrix[x][starty] - num) / 5 == 1)
             {
+                matrix[x][starty] = -1;
+                Score++;
                 Skillone(starty);
             }
             else if ((matrix[x][starty] - num) / 5 == 2)
             {
+                matrix[x][starty] = -1;
+                Score++;
                 Skilltwo(x);
             }
             else if((matrix[x][starty] - num) / 5 == 3)
             {
+                matrix[x][starty] = -1;
+                Score++;
                 Skillthree(x,starty);
             }
             starty++;

@@ -424,7 +424,7 @@ void play::Skillfour(int num)
             for (int j = 0; j < 7; j++)
             {
                 if (matrix[i][j] % 5 == People && matrix[i][j] != 20)Num++;
-                if (matrix[i][j] >= 0 && matrix[i][j] % 5 == num % 5 && matrix[i][j] != 20)
+                if (matrix[i][j] >= 0&& matrix[i][j] != 20)
                 {
                     if (matrix[i][j] < 5)
                     {

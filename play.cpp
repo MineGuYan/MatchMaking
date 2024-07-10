@@ -95,18 +95,26 @@ void play::Sound()
 
 void play::SkillSoundone()
 {
-    QSoundEffect * generalSound=new QSoundEffect(this);
-    generalSound->setSource(QUrl::fromLocalFile(":/bgm/normalDelete.wav"));
+    QSoundEffect * Soundone=new QSoundEffect(this);
+    Soundone->setSource(QUrl::fromLocalFile(":/bgm/deleteRow.wav"));
     //generalSound->setVolume(MusicEffect);
-    generalSound->play();
+    Soundone->play();
 }
 
 void play::SkillSoundtwo()
 {
-    QSoundEffect * generalSound=new QSoundEffect(this);
-    generalSound->setSource(QUrl::fromLocalFile(":/bgm/normalDelete.wav"));
+    QSoundEffect * Soundtwo=new QSoundEffect(this);
+    Soundtwo->setSource(QUrl::fromLocalFile(":/bgm/boom.wav"));
     //generalSound->setVolume(MusicEffect);
-    generalSound->play();
+    Soundtwo->play();
+}
+
+void play::SkillSoundfour()
+{
+    QSoundEffect * Soundfour=new QSoundEffect(this);
+    Soundfour->setSource(QUrl::fromLocalFile(":/bgm/skillfour.wav"));
+    //generalSound->setVolume(MusicEffect);
+    Soundfour->play();
 }
 
 play::~play()
@@ -261,7 +269,7 @@ void play::swap(int i)
 
 void play::Skillone(int y)
 {
-    Sound();
+    SkillSoundone();
     for (int i = 0; i < 7; i++)
     {
         if(matrix[i][y]%5==People&&matrix[i][y]!=20)Num++;
@@ -296,7 +304,7 @@ void play::Skillone(int y)
 
 void play:: Skilltwo(int x)
 {
-    Sound();
+    SkillSoundone();
     for (int j = 0; j < 7; j++)
     {
         if(matrix[x][j]%5==People&&matrix[x][j]!=20)Num++;
@@ -331,7 +339,7 @@ void play:: Skilltwo(int x)
 
 void play::Skillthree(int x,int y,int r)
 {
-    Sound();
+    SkillSoundtwo();
     for(int i=(x-r>0?x-r:0);i<=(x+r>6?6:x+r);i++)
         for(int j=(y-r>0?y-r:0);j<=(y+r>6?6:y+r);j++)
         {
@@ -367,7 +375,7 @@ void play::Skillthree(int x,int y,int r)
 
 void play::Skillfour(int num)
 {
-    Sound();
+    SkillSoundfour();
     if (num >= 0 && num < 5)
     {
         Score += 15;
@@ -586,7 +594,6 @@ int play::Judgecolumn(int x,int y,int num)
     }
     if(columnNum>=2)
     {
-        Sound();
         flag=1;
         if(y!=0){
             starty=y-1;
@@ -697,7 +704,6 @@ int play::Judgerow(int x,int y,int num)
     }
     if(rowNum>=2)
     {
-        Sound();
         flag=1;
         if(x!=0){
             startx=x-1;
@@ -785,7 +791,6 @@ void play:: Delete1(int x,int y,int num)
     int startx = x-1;
     int number = 0;
     int flag=0;//判断列的
-    Sound();
     while (startx <= 6)
     {
         if (matrix[startx][y]%5 == num&&matrix[startx][y]!=20)
@@ -794,6 +799,7 @@ void play:: Delete1(int x,int y,int num)
             flag+=Judgecolumn(startx,y,num);
             if(matrix[startx][y]<5)
             {
+                Sound();
                 if(matrix[startx][y]==People)Num++;
                 Score++;
                 matrix[startx][y] = -1;
@@ -843,11 +849,11 @@ void play:: Delete2(int x, int y,int num)
     int starty = y-1;
     int number = 0;
     int flag=0;//判断行的
-    Sound();
     while (starty <= 6)
     {
         if (matrix[x][starty]%5 == num&&matrix[x][starty]!=20)
         {
+            Sound();
             number++;
             flag+=Judgerow(x,starty,num);
             if(matrix[x][starty]<5)

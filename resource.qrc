@@ -34,6 +34,10 @@
         <file>rc/role3.png</file>
         <file>rc/role4.png</file>
         <file>bgm/normalDelete.wav</file>
-        <file>bgm/effect.wav</file>
+        <file>bgm/skillfour.wav</file>
+        <file>bgm/boom.wav</file>
+        <file>bgm/dada.wav</file>
+        <file>bgm/deleteRow.wav</file>
+        <file>bgm/fall.wav</file>
     </qresource>
 </RCC>

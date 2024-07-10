@@ -37,6 +37,7 @@ public:
     void Sound();
     void SkillSoundone();
     void SkillSoundtwo();
+    void SkillSoundfour();
     virtual void Skill()=0;
     int Num=0;
     int People=0;

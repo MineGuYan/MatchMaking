@@ -8,6 +8,9 @@
 #include <functional>
 #include <QTest>
 #include <QFont>
+#include <QSoundEffect>
+#include <QUrl>
+
 namespace Ui {
 class play;
 }
@@ -30,6 +33,9 @@ public:
     int Judgecolumn(int x, int y,int num);
     int Judgerow(int x, int y,int num);
     void fall();
+    void Sound();
+    void SkillSoundone();
+    void SkillSoundtwo();
     virtual void Skill()=0;
     int Num=0;
     int People=0;

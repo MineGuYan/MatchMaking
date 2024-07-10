@@ -33,5 +33,7 @@
         <file>rc/role2.png</file>
         <file>rc/role3.png</file>
         <file>rc/role4.png</file>
+        <file>bgm/normalDelete.wav</file>
+        <file>bgm/effect.wav</file>
     </qresource>
 </RCC>

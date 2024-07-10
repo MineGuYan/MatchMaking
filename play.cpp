@@ -9,6 +9,32 @@ play::play(QWidget *parent)
     ui->setupUi(this);   
     this->setWindowTitle("小鸟消消乐");
     ui->bg->setPixmap(QPixmap(":/rc/bg.png"));
+    score=new QLabel(this);
+    cpscore=new QLabel(this);
+    step=new QLabel(this);
+    cpstep=new QLabel(this);;
+    QFont font1("华文隶书",48),font2("华文楷体",24);
+    score->setFont(font1);
+    cpscore->setFont(font1);
+    step->setFont(font2);
+    cpstep->setFont(font2);
+    score->setAlignment(Qt::AlignCenter);
+    cpscore->setAlignment(Qt::AlignCenter);
+    step->setAlignment(Qt::AlignCenter);
+    cpstep->setAlignment(Qt::AlignCenter);
+    score->setStyleSheet("QLabel { color : white; }");
+    cpscore->setStyleSheet("QLabel { color : white; }");
+    step->setStyleSheet("QLabel { color : rgb(254,191,68); }");
+    cpstep->setStyleSheet("QLabel { color : rgb(254,191,68); }");
+    score->setGeometry(140, 500, 150, 150);
+    cpscore->setGeometry(980, 500, 150, 150);
+    step->setGeometry(370, 20, 60, 33);
+    cpstep->setGeometry(855, 20, 60, 33);
+    score->setText(QString::number(Score));
+    cpscore->setText(QString::number(CPScore));
+    step->setText(QString::number(Step));
+    cpstep->setText(QString::number(CPStep));
+    CPRole=rand()%5;
     fruit=new QPushButton[49];
     for(int i=0;i<49;i++)
     {
@@ -25,10 +51,38 @@ play::play(QWidget *parent)
     draw();
 }
 
+void play::Sound()
+{
+    QSoundEffect * generalSound=new QSoundEffect(this);
+    generalSound->setSource(QUrl::fromLocalFile(":/bgm/normalDelete.wav"));
+    //generalSound->setVolume(MusicEffect);
+    generalSound->play();
+}
+
+void play::SkillSoundone()
+{
+    QSoundEffect * generalSound=new QSoundEffect(this);
+    generalSound->setSource(QUrl::fromLocalFile(":/bgm/normalDelete.wav"));
+    //generalSound->setVolume(MusicEffect);
+    generalSound->play();
+}
+
+void play::SkillSoundtwo()
+{
+    QSoundEffect * generalSound=new QSoundEffect(this);
+    generalSound->setSource(QUrl::fromLocalFile(":/bgm/normalDelete.wav"));
+    //generalSound->setVolume(MusicEffect);
+    generalSound->play();
+}
+
 play::~play()
 {
     delete ui;
     delete[] fruit;
+    delete score;
+    delete cpscore;
+    delete step;
+    delete cpstep;
 }
 
 void play::draw()
@@ -44,7 +98,7 @@ void play::draw()
             fruit[i*7+j].move(365+i*80,85+j*80);
         }
     this->repaint();
-    QTest::qSleep(100);
+    QTest::qSleep(10);
 }
 
 bool play::judgeStart()
@@ -75,6 +129,7 @@ void play::swap(int i)
         }
         else if(abs(sx-ix)+abs(sy-iy)==1)
         {
+            Step--;
             int tem=matrix[sx][sy];
             matrix[sx][sy]=matrix[ix][iy];
             matrix[ix][iy]=tem;
@@ -85,8 +140,7 @@ void play::swap(int i)
                 fruit[i].move(365+ix*80-Distance*vectorx*2,85+iy*80-Distance*vectory*2);
                 fruit[Selected].move(365+sx*80+Distance*vectorx*2,85+sy*80+Distance*vectory*2);
                 this->repaint();
-            }
-
+            }            
             if((matrix[sx][sy]>=5&&matrix[ix][iy]>=5)||matrix[sx][sy]==20||matrix[ix][iy]==20)
             {
                 int x=matrix[sx][sy]>matrix[ix][iy]?matrix[ix][iy]:matrix[sx][sy];
@@ -147,6 +201,7 @@ void play::swap(int i)
             {
                 matrix[ix][iy]=matrix[sx][sy];
                 matrix[sx][sy]=tem;
+                Step++;
             }
             Selected=-1;
             draw();
@@ -158,10 +213,14 @@ void play::swap(int i)
             Selected=i;
         }
     }
+    score->setText(QString::number(Score));
+    step->setText(QString::number(Step));
+    //if(step==0)
 }
 
 void play::Skillone(int y)
 {
+    Sound();
     for (int i = 0; i < 7; i++)
     {
         if(matrix[i][y]%5==People&&matrix[i][y]!=20)Num++;
@@ -196,6 +255,7 @@ void play::Skillone(int y)
 
 void play:: Skilltwo(int x)
 {
+    Sound();
     for (int j = 0; j < 7; j++)
     {
         if(matrix[x][j]%5==People&&matrix[x][j]!=20)Num++;
@@ -230,8 +290,9 @@ void play:: Skilltwo(int x)
 
 void play::Skillthree(int x,int y,int r)
 {
+    Sound();
     for(int i=(x-r>0?x-r:0);i<=(x+r>6?6:x+r);i++)
-        for(int j=(y-r>0?y-r:0);j<(y+r>6?6:y+r);j++)
+        for(int j=(y-r>0?y-r:0);j<=(y+r>6?6:y+r);j++)
         {
             if(matrix[i][j]%5==People&&matrix[i][j]!=20)Num++;
             if(matrix[i][j]>=0)
@@ -265,6 +326,7 @@ void play::Skillthree(int x,int y,int r)
 
 void play::Skillfour(int num)
 {
+    Sound();
     if (num >= 0 && num < 5)
     {
         Score += 15;
@@ -424,7 +486,7 @@ void play::Skillfour(int num)
             for (int j = 0; j < 7; j++)
             {
                 if (matrix[i][j] % 5 == People && matrix[i][j] != 20)Num++;
-                if (matrix[i][j] >= 0&& matrix[i][j] != 20)
+                if (matrix[i][j] >= 0 && matrix[i][j] != 20)
                 {
                     if (matrix[i][j] < 5)
                     {
@@ -483,6 +545,7 @@ int play::Judgecolumn(int x,int y,int num)
     }
     if(columnNum>=2)
     {
+        Sound();
         flag=1;
         if(y!=0){
             starty=y-1;
@@ -593,6 +656,7 @@ int play::Judgerow(int x,int y,int num)
     }
     if(rowNum>=2)
     {
+        Sound();
         flag=1;
         if(x!=0){
             startx=x-1;
@@ -680,6 +744,7 @@ void play:: Delete1(int x,int y,int num)
     int startx = x-1;
     int number = 0;
     int flag=0;//判断列的
+    Sound();
     while (startx <= 6)
     {
         if (matrix[startx][y]%5 == num&&matrix[startx][y]!=20)
@@ -736,6 +801,7 @@ void play:: Delete2(int x, int y,int num)
     int starty = y-1;
     int number = 0;
     int flag=0;//判断行的
+    Sound();
     while (starty <= 6)
     {
         if (matrix[x][starty]%5 == num&&matrix[x][starty]!=20)
@@ -814,28 +880,20 @@ bool play:: Judge()
 void play::fall()
 {
     draw();
-    for (int i = 0; i < 7; i++)
-    {
-        for (int j = 6; j >= 0; j--)
+    int flag;
+    do{
+        flag=0;
+        for(int j=6;j>=0;j--)
         {
-            if (matrix[i][j] == -1)
-            {
-                if(j)
+            for(int i=0;i<7;i++)
+                if(matrix[i][j] == -1)
                 {
-                    for (int p = j; p > 0; p--)
-                    {
-                        matrix[i][p] = matrix[i][p-1];
-                    }
-                    matrix[i][0] = rand()%5;                    
-                    j++;
-                    draw();
-                }
-                else {
+                    flag++;
+                    if(j)for (int p = j; p > 0; p--)matrix[i][p] = matrix[i][p-1];
                     matrix[i][0] = rand()%5;
-                    draw();
                 }
-            }
+            if(flag)draw();
         }
-    }
+    }while (flag);
     Judge();
 }

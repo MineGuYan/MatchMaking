@@ -7,6 +7,10 @@
 #include <QPushButton>
 #include <functional>
 #include <QTest>
+#include <QFont>
+#include <QSoundEffect>
+#include <QUrl>
+
 namespace Ui {
 class play;
 }
@@ -29,10 +33,19 @@ public:
     int Judgecolumn(int x, int y,int num);
     int Judgerow(int x, int y,int num);
     void fall();
+    void Sound();
+    void SkillSoundone();
+    void SkillSoundtwo();
     //virtual void Skill();
     int Num=0;
     int People=0;
     int Score=0;
+    int CPRole;
+    int CPScore=0;
+    int Step=18;
+    int CPStep=18;
+    int HP=100;
+    int CPHP=100;
 
     void draw();
     bool judgeStart();
@@ -45,6 +58,7 @@ private slots:
 private:
     Ui::play *ui;
     QPushButton *fruit;
+    QLabel *score,*cpscore,*step,*cpstep;
     QString nor="QPushButton{background-color: transparent;border-radius: 10px;}";
     QString sel="QPushButton{background-color: rgb(85, 255, 127);border-radius: 10px;}";
 };

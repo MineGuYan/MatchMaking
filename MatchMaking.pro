@@ -9,29 +9,29 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    bird0.cpp \
+    bird1.cpp \
+    bird2.cpp \
+    bird3.cpp \
+    bird4.cpp \
     client.cpp \
     main.cpp \
     mainmenu.cpp \
     network.cpp \
     play.cpp \
-    server.cpp \
-    skill0.cpp \
-    skill1.cpp \
-    skill2.cpp \
-    skill3.cpp \
-    skill4.cpp
+    server.cpp
 
 HEADERS += \
+    bird0.h \
+    bird1.h \
+    bird2.h \
+    bird3.h \
+    bird4.h \
     client.h \
     mainmenu.h \
     network.h \
     play.h \
-    server.h \
-    skill0.h \
-    skill1.h \
-    skill2.h \
-    skill3.h \
-    skill4.h
+    server.h
 
 FORMS += \
     client.ui \

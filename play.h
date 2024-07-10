@@ -30,7 +30,7 @@ public:
     int Judgecolumn(int x, int y,int num);
     int Judgerow(int x, int y,int num);
     void fall();
-    //virtual void Skill();
+    virtual void Skill()=0;
     int Num=0;
     int People=0;
     int Score=0;
@@ -45,6 +45,7 @@ public:
     bool judgeStart();
     int Selected=-1;
     int matrix[7][7];
+    QLabel *score,*cpscore,*step,*cpstep,*hp,*cphp,*hptext,*cphptext,*skilltext,*cpavatar,*cprole;
 
 private slots:
     void swap(int);
@@ -52,7 +53,6 @@ private slots:
 private:
     Ui::play *ui;
     QPushButton *fruit;
-    QLabel *score,*cpscore,*step,*cpstep;
     QString nor="QPushButton{background-color: transparent;border-radius: 10px;}";
     QString sel="QPushButton{background-color: rgb(85, 255, 127);border-radius: 10px;}";
 };

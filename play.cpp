@@ -12,29 +12,63 @@ play::play(QWidget *parent)
     score=new QLabel(this);
     cpscore=new QLabel(this);
     step=new QLabel(this);
-    cpstep=new QLabel(this);;
-    QFont font1("华文隶书",48),font2("华文楷体",24);
+    cpstep=new QLabel(this);
+    hp=new QLabel(this);
+    cphp=new QLabel(this);
+    hptext=new QLabel(this);
+    cphptext=new QLabel(this);
+    skilltext=new QLabel(this);
+    cpavatar=new QLabel(this);
+    cprole=new QLabel(this);
+    QFont font1("华文隶书",48),font2("华文楷体",24),font3("华文隶书",20);
     score->setFont(font1);
     cpscore->setFont(font1);
     step->setFont(font2);
     cpstep->setFont(font2);
+    hptext->setFont(font3);
+    cphptext->setFont(font3);
+    skilltext->setFont(font2);
     score->setAlignment(Qt::AlignCenter);
     cpscore->setAlignment(Qt::AlignCenter);
     step->setAlignment(Qt::AlignCenter);
     cpstep->setAlignment(Qt::AlignCenter);
+    hptext->setAlignment(Qt::AlignCenter);
+    cphptext->setAlignment(Qt::AlignCenter);
+    skilltext->setAlignment(Qt::AlignCenter);
     score->setStyleSheet("QLabel { color : white; }");
     cpscore->setStyleSheet("QLabel { color : white; }");
     step->setStyleSheet("QLabel { color : rgb(254,191,68); }");
     cpstep->setStyleSheet("QLabel { color : rgb(254,191,68); }");
+    hp->setStyleSheet("QLabel { background-color : rgb(116,137,77);}");
+    cphp->setStyleSheet("QLabel { background-color : rgb(145,60,38);}");
+    hptext->setStyleSheet("QLabel { color : white; }");
+    cphptext->setStyleSheet("QLabel { color : white; }");
+    skilltext->setStyleSheet("QLabel { color : rgb(58,53,79); }");
     score->setGeometry(140, 500, 150, 150);
     cpscore->setGeometry(980, 500, 150, 150);
     step->setGeometry(370, 20, 60, 33);
     cpstep->setGeometry(855, 20, 60, 33);
+    hp->setGeometry(135,100,150,20);
+    cphp->setGeometry(1015,100,150,20);
+    hptext->setGeometry(135,100,150,20);
+    cphptext->setGeometry(1015,100,150,20);
+    skilltext->setGeometry(305,400,40,40);
     score->setText(QString::number(Score));
     cpscore->setText(QString::number(CPScore));
     step->setText(QString::number(Step));
     cpstep->setText(QString::number(CPStep));
+    hptext->setText(QString::number(HP)+"/100");
+    cphptext->setText(QString::number(CPHP)+"/100");
+    skilltext->setText(QString::number(Num));
     CPRole=rand()%5;
+    cpavatar->setGeometry(1165,70,80,80);
+    cprole->setGeometry(970,230,230,270);
+    QPixmap pixmap1(":/rc/bird"+QString::number(CPRole)+".png");
+    pixmap1=pixmap1.scaled(80,80);
+    cpavatar->setPixmap(pixmap1);
+    QPixmap pixmap2(":/rc/role"+QString::number(CPRole)+".png");
+    pixmap2=pixmap2.scaled(270,270);
+    cprole->setPixmap(pixmap2);
     fruit=new QPushButton[49];
     for(int i=0;i<49;i++)
     {
@@ -59,6 +93,13 @@ play::~play()
     delete cpscore;
     delete step;
     delete cpstep;
+    delete hp;
+    delete cphp;
+    delete hptext;
+    delete cphptext;
+    delete skilltext;
+    delete cpavatar;
+    delete cprole;
 }
 
 void play::draw()
@@ -762,7 +803,8 @@ void play:: Delete1(int x,int y,int num)
         matrix[x][y] = 20;
     }
     fall();
-    //Skill();
+    skilltext->setText(QString::number(Num));
+    Skill();
 }
 
 void play:: Delete2(int x, int y,int num)
@@ -818,7 +860,8 @@ void play:: Delete2(int x, int y,int num)
         matrix[x][y] = 20;
     }
     fall();
-    //Skill();
+    skilltext->setText(QString::number(Num));
+    Skill();
 }
 
 bool play:: Judge()
@@ -829,8 +872,8 @@ bool play:: Judge()
             {
                 if(matrix[i][j]!=20&&matrix[i][j+1]!=20&&matrix[i][j+2]!=20)
                 {
-                    Delete2(i,j+1,matrix[i][j]%5);
-                       return false;
+                    Delete2(i,j+1,matrix[i][j]%5);                    
+                    return false;
                 }
             }
     for(int j=0;j<7;j++)

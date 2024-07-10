@@ -23,5 +23,15 @@
         <file>rc/20.png</file>
         <file>rc/icon.ico</file>
         <file>rc/bg.png</file>
+        <file>rc/bird0.png</file>
+        <file>rc/bird1.png</file>
+        <file>rc/bird2.png</file>
+        <file>rc/bird3.png</file>
+        <file>rc/bird4.png</file>
+        <file>rc/role0.png</file>
+        <file>rc/role1.png</file>
+        <file>rc/role2.png</file>
+        <file>rc/role3.png</file>
+        <file>rc/role4.png</file>
     </qresource>
 </RCC>

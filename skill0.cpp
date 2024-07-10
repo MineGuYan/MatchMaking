@@ -32,7 +32,7 @@ skill0::skill0()
                 }
             }
         }
-        fall();
         Num-=5;
+        fall();
     }
 }

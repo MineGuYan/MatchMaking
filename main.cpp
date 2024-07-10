@@ -2,7 +2,7 @@
 //#include "client.h"
 //#include "server.h"
 //#include "play.h"
-#include "bird0.h"
+#include "bird1.h"
 
 #include <QApplication>
 
@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
     //Client w;
     //MainMenu w;
     //play w;
-    bird0 w;
+    bird1 w;
     w.show();
     return a.exec();
 }

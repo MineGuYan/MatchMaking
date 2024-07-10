@@ -10,6 +10,7 @@
 #include <QFont>
 #include <QSoundEffect>
 #include <QUrl>
+#include <QTime>
 
 namespace Ui {
 class play;

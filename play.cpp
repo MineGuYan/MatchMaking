@@ -920,6 +920,7 @@ bool play:: Judge()
             }
     return true;
 }
+
 void play::fall()
 {
     draw();

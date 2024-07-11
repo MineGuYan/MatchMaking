@@ -33,6 +33,7 @@ void bird0::Skill()
     {
         for(int k=0;k<=1;k++)
         {
+            Score+=3;
             int x=rand()%6;
             int y=rand()%6;
             for(int i=x;i<=x+1;i++)

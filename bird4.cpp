@@ -31,6 +31,7 @@ void bird4::Skill()
 {
     while(Num>=7)
     {
+        Score+=15;
         for(int i=0;i<4;i++)
         {
             int x=rand()%7;

@@ -29,7 +29,7 @@ bird1::~bird1()
 
 void bird1::Skill()
 {
-    while(Num>=7)
+    while(Num>=10)
     {
         int x=rand()%7;
         int y=rand()%7;
@@ -39,7 +39,7 @@ void bird1::Skill()
             y=rand()%7;
         }
         matrix[x][y]=20;
-        Num-=7;
+        Num-=10;
         skilltext->setText(QString::number(Num));
         draw();
     }

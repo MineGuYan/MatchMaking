@@ -10,7 +10,7 @@
 #include <QFont>
 #include <QSoundEffect>
 #include <QUrl>
-#include <QTime>
+#include <QTimer>
 
 namespace Ui {
 class play;
@@ -46,21 +46,25 @@ public:
     int CPScore=0;
     int Step=18;
     int CPStep=18;
-    int HP=100;
-    int CPHP=100;
+    int HP=300;
+    int CPHP=300;
 
     void draw();
     bool judgeStart();
+    void gameover();
+    virtual void cpGetScore();
     int Selected=-1;
     int matrix[7][7];
+    int timeCount=0;
     QLabel *score,*cpscore,*step,*cpstep,*hp,*cphp,*hptext,*cphptext,*skilltext,*cpavatar,*cprole;
 
 private slots:
     void swap(int);
-
+    void cpplay();
 private:
     Ui::play *ui;
     QPushButton *fruit;
+    QTimer *timer;
     QString nor="QPushButton{background-color: transparent;border-radius: 10px;}";
     QString sel="QPushButton{background-color: rgb(85, 255, 127);border-radius: 10px;}";
 };

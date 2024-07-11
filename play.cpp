@@ -57,8 +57,8 @@ play::play(QWidget *parent)
     cpscore->setText(QString::number(CPScore));
     step->setText(QString::number(Step));
     cpstep->setText(QString::number(CPStep));
-    hptext->setText(QString::number(HP)+"/100");
-    cphptext->setText(QString::number(CPHP)+"/100");
+    hptext->setText(QString::number(HP)+"/300");
+    cphptext->setText(QString::number(CPHP)+"/300");
     skilltext->setText(QString::number(Num));
     CPRole=rand()%5;
     cpavatar->setGeometry(1165,70,80,80);
@@ -69,6 +69,9 @@ play::play(QWidget *parent)
     QPixmap pixmap2(":/rc/role"+QString::number(CPRole)+".png");
     pixmap2=pixmap2.scaled(270,270);
     cprole->setPixmap(pixmap2);
+    timer=new QTimer;
+    connect(timer,&QTimer::timeout,this,&play::cpplay);
+    timer->start(1000);
     fruit=new QPushButton[49];
     for(int i=0;i<49;i++)
     {
@@ -132,6 +135,7 @@ play::~play()
     delete skilltext;
     delete cpavatar;
     delete cprole;
+    delete timer;
 }
 
 void play::draw()
@@ -163,108 +167,110 @@ bool play::judgeStart()
 
 void play::swap(int i)
 {
-    if(Selected==-1)
+    if(Step)
     {
-        fruit[i].setStyleSheet(sel);
-        Selected=i;
-    }
-    else
-    {
-        int sx=Selected/7,sy=Selected%7,ix=i/7,iy=i%7;
-        if(sx==ix&&sy==iy)
+        if(Selected==-1)
         {
-            fruit[Selected].setStyleSheet(nor);
-            Selected=-1;
-        }
-        else if(abs(sx-ix)+abs(sy-iy)==1)
-        {
-            Step--;
-            int tem=matrix[sx][sy];
-            matrix[sx][sy]=matrix[ix][iy];
-            matrix[ix][iy]=tem;
-            fruit[Selected].setStyleSheet(nor);
-            int vectorx=ix-sx,vectory=iy-sy;
-            for(int Distance=1;Distance<=40;Distance++)
-            {
-                fruit[i].move(365+ix*80-Distance*vectorx*2,85+iy*80-Distance*vectory*2);
-                fruit[Selected].move(365+sx*80+Distance*vectorx*2,85+sy*80+Distance*vectory*2);
-                this->repaint();
-            }            
-            if((matrix[sx][sy]>=5&&matrix[ix][iy]>=5)||matrix[sx][sy]==20||matrix[ix][iy]==20)
-            {
-                int x=matrix[sx][sy]>matrix[ix][iy]?matrix[ix][iy]:matrix[sx][sy];
-                int S=matrix[sx][sy]/5,I=matrix[ix][iy]/5;
-                matrix[ix][iy]=-1;
-                matrix[sx][sy]=-1;
-                if(S==1&&I==1)
-                {
-                    Skillone(iy);
-                    Skillone(sy);
-                }
-                else if(S==2&&I==2)
-                {
-                    Skilltwo(ix);
-                    Skilltwo(sx);
-                }
-                else if(S==3&&I==3)
-                {
-                    Skillthree(ix,iy,2);
-                }
-                else if(S==4||I==4)
-                {
-                    Skillfour(x);
-                }
-                else if(S==1&&I==2)
-                {
-                    Skilltwo(ix);
-                    Skillone(sy);
-                }
-                else if(S==2&&I==1)
-                {
-                    Skilltwo(sx);
-                    Skillone(iy);
-                }
-                else if(S==1&&I==3)
-                {
-                    for(int j=(sy-1>0?sy-1:0);j<=(sy+1>6?6:sy+1);j++)
-                        Skillone(j);
-                }
-                else if(S==3&&I==1)
-                {
-                    for(int j=(iy-1>0?iy-1:0);j<=(iy+1>6?6:iy+1);j++)
-                        Skillone(j);
-                }
-                else if(S==2&&I==3)
-                {
-                    for(int j=(sx-1>0?sx-1:0);j<=(sx+1>6?6:sx+1);j++)
-                        Skilltwo(j);
-                }
-                else if(S==3&&I==2)
-                {
-                    for(int j=(ix-1>0?ix-1:0);j<=(ix+1>6?6:ix+1);j++)
-                        Skilltwo(j);
-                }
-                fall();
-            }
-            else if(Judge())
-            {
-                matrix[ix][iy]=matrix[sx][sy];
-                matrix[sx][sy]=tem;
-                Step++;
-            }
-            Selected=-1;
-            draw();
+            fruit[i].setStyleSheet(sel);
+            Selected=i;
         }
         else
         {
-            fruit[i].setStyleSheet(sel);
-            fruit[Selected].setStyleSheet(nor);
-            Selected=i;
+            int sx=Selected/7,sy=Selected%7,ix=i/7,iy=i%7;
+            if(sx==ix&&sy==iy)
+            {
+                fruit[Selected].setStyleSheet(nor);
+                Selected=-1;
+            }
+            else if(abs(sx-ix)+abs(sy-iy)==1)
+            {
+                Step--;
+                int tem=matrix[sx][sy];
+                matrix[sx][sy]=matrix[ix][iy];
+                matrix[ix][iy]=tem;
+                fruit[Selected].setStyleSheet(nor);
+                int vectorx=ix-sx,vectory=iy-sy;
+                for(int Distance=1;Distance<=40;Distance++)
+                {
+                    fruit[i].move(365+ix*80-Distance*vectorx*2,85+iy*80-Distance*vectory*2);
+                    fruit[Selected].move(365+sx*80+Distance*vectorx*2,85+sy*80+Distance*vectory*2);
+                    this->repaint();
+                }
+                if((matrix[sx][sy]>=5&&matrix[ix][iy]>=5)||matrix[sx][sy]==20||matrix[ix][iy]==20)
+                {
+                    int x=matrix[sx][sy]>matrix[ix][iy]?matrix[ix][iy]:matrix[sx][sy];
+                    int S=matrix[sx][sy]/5,I=matrix[ix][iy]/5;
+                    matrix[ix][iy]=-1;
+                    matrix[sx][sy]=-1;
+                    if(S==1&&I==1)
+                    {
+                        Skillone(iy);
+                        Skillone(sy);
+                    }
+                    else if(S==2&&I==2)
+                    {
+                        Skilltwo(ix);
+                        Skilltwo(sx);
+                    }
+                    else if(S==3&&I==3)
+                    {
+                        Skillthree(ix,iy,2);
+                    }
+                    else if(S==4||I==4)
+                    {
+                        Skillfour(x);
+                    }
+                    else if(S==1&&I==2)
+                    {
+                        Skilltwo(ix);
+                        Skillone(sy);
+                    }
+                    else if(S==2&&I==1)
+                    {
+                        Skilltwo(sx);
+                        Skillone(iy);
+                    }
+                    else if(S==1&&I==3)
+                    {
+                        for(int j=(sy-1>0?sy-1:0);j<=(sy+1>6?6:sy+1);j++)
+                            Skillone(j);
+                    }
+                    else if(S==3&&I==1)
+                    {
+                        for(int j=(iy-1>0?iy-1:0);j<=(iy+1>6?6:iy+1);j++)
+                            Skillone(j);
+                    }
+                    else if(S==2&&I==3)
+                    {
+                        for(int j=(sx-1>0?sx-1:0);j<=(sx+1>6?6:sx+1);j++)
+                            Skilltwo(j);
+                    }
+                    else if(S==3&&I==2)
+                    {
+                        for(int j=(ix-1>0?ix-1:0);j<=(ix+1>6?6:ix+1);j++)
+                            Skilltwo(j);
+                    }
+                    fall();
+                }
+                else if(Judge())
+                {
+                    matrix[ix][iy]=matrix[sx][sy];
+                    matrix[sx][sy]=tem;
+                    Step++;
+                }
+                Selected=-1;
+                draw();
+            }
+            else
+            {
+                fruit[i].setStyleSheet(sel);
+                fruit[Selected].setStyleSheet(nor);
+                Selected=i;
+            }
         }
+        score->setText(QString::number(Score));
+        step->setText(QString::number(Step));
     }
-    score->setText(QString::number(Score));
-    step->setText(QString::number(Step));
-    //if(step==0)
 }
 
 void play::Skillone(int y)
@@ -529,7 +535,7 @@ void play::Skillfour(int num)
     }
     else if (num==20)
     {
-        Score += 50;
+        Score += 20;
         for (int i = 0; i < 7; i++)
         {
             for (int j = 0; j < 7; j++)
@@ -946,4 +952,36 @@ void play::fall()
         }
     }while (flag);
     Judge();
+}
+
+void play::cpplay()
+{
+    if(CPStep)
+    {
+        if(timeCount==2)
+        {
+            timeCount=0;
+            CPStep--;
+            cpstep->setText(QString::number(CPStep));
+            cpGetScore();
+            cpscore->setText(QString::number(CPScore));
+        }
+        else timeCount++;
+    }
+    else if(Step==0)
+    {
+        timer->stop();
+        timeCount=0;
+        gameover();
+    }
+}
+
+void play::cpGetScore()
+{
+    CPScore+=3+rand()%60;
+}
+
+void play::gameover()
+{
+
 }

@@ -29,13 +29,14 @@ bird3::~bird3()
 
 void bird3::Skill()
 {
-    while(Num>=7)
+    while(Num>=6)
     {
+        Score+=4;
         int x=rand()%7;
         int y=rand()%7;
         Skillone(y);
         Skilltwo(x);
-        Num-=7;
+        Num-=6;
         fall();
         skilltext->setText(QString::number(Num));
     }

@@ -29,7 +29,7 @@ bird2::~bird2()
 
 void bird2::Skill()
 {
-    while(Num>=6)
+    while(Num>=5)
     {
         for(int i=0;i<4;i++)
         {
@@ -47,7 +47,7 @@ void bird2::Skill()
             }
             else matrix[x][y]+=10;
         }
-        Num-=6;
+        Num-=5;
         skilltext->setText(QString::number(Num));
         draw();
     }

@@ -48,8 +48,8 @@ play::play(QWidget *parent)
     cpscore->setGeometry(980, 500, 150, 150);
     step->setGeometry(370, 20, 60, 33);
     cpstep->setGeometry(855, 20, 60, 33);
-    hp->setGeometry(135,100,150,20);
-    cphp->setGeometry(1015,100,150,20);
+    hp->setGeometry(135,101,150,19);
+    cphp->setGeometry(1015,101,150,19);
     hptext->setGeometry(135,100,150,20);
     cphptext->setGeometry(1015,100,150,20);
     skilltext->setGeometry(305,400,40,40);
@@ -69,9 +69,46 @@ play::play(QWidget *parent)
     QPixmap pixmap2(":/rc/role"+QString::number(CPRole)+".png");
     pixmap2=pixmap2.scaled(270,270);
     cprole->setPixmap(pixmap2);
+    pkgif=new QMovie("D:\\Qt\\Project\\MatchMaking\\rc\\pk.gif");
+    pk=new QLabel(this);
+    pk->setGeometry(0,0,1280,720);
+    pk->setScaledContents(true);
+    pk->setMovie(pkgif);
+    pk->hide();
+    winbg=new QLabel(this);
+    losebg=new QLabel(this);
+    nextbg=new QLabel(this);
+    nexttext=new QLabel(this);
+    wintext1=new QLabel(this);
+    wintext2=new QLabel(this);
+    quitButton=new QPushButton(this);
+    connect(quitButton,&QPushButton::clicked,this,&play::quit);
+    winbg->setGeometry(0,0,1280,720);
+    losebg->setGeometry(0,0,1280,720);
+    nextbg->setGeometry(0,0,1280,720);
+    nexttext->setGeometry(360,240,562,166);
+    wintext1->setGeometry(640,365,150,60);
+    wintext2->setGeometry(640,440,150,60);
+    quitButton->setGeometry(500,595,280,60);
+    wintext1->setAlignment(Qt::AlignCenter);
+    wintext2->setAlignment(Qt::AlignCenter);
+    nexttext->setAlignment(Qt::AlignCenter);
+    nexttext->setFont(QFont("华文楷体",72));
+    nexttext->setStyleSheet("QLabel { color : rgb(80,43,29); }");
+    quitButton->setIcon(QIcon(":/rc/quit.png"));
+    quitButton->setIconSize(QSize(280,60));
+    winbg->setPixmap(QPixmap(":/rc/win.png"));
+    losebg->setPixmap(QPixmap(":/rc/lose.png"));
+    nextbg->setPixmap(QPixmap(":/rc/next.png"));
+    winbg->hide();
+    losebg->hide();
+    nextbg->hide();
+    nexttext->hide();
+    wintext1->hide();
+    wintext2->hide();
+    quitButton->hide();
     timer=new QTimer;
     connect(timer,&QTimer::timeout,this,&play::cpplay);
-    timer->start(1000);
     fruit=new QPushButton[49];
     for(int i=0;i<49;i++)
     {
@@ -86,6 +123,19 @@ play::play(QWidget *parent)
                 matrix[i][j]=rand()%5;
     }while(judgeStart());
     draw();
+    nextbg->raise();
+    nexttext->raise();
+    nexttext->setText("第"+QString::number(round)+"回合");
+    nextbg->show();
+    nexttext->show();
+    step->setText(QString::number(Step));
+    cpstep->setText(QString::number(CPStep));
+    QTimer::singleShot(1000,[this](){
+        nextbg->hide();
+        nexttext->hide();
+        timer->start(1000);
+    });
+    win();
 }
 
 void play::Sound()
@@ -136,6 +186,14 @@ play::~play()
     delete cpavatar;
     delete cprole;
     delete timer;
+    delete pkgif;
+    delete pk;
+    delete winbg;
+    delete losebg;
+    delete quitButton;
+    delete nextbg;
+    delete wintext1;
+    delete wintext2;
 }
 
 void play::draw()
@@ -270,6 +328,7 @@ void play::swap(int i)
         }
         score->setText(QString::number(Score));
         step->setText(QString::number(Step));
+        sendScore();
     }
 }
 
@@ -983,5 +1042,147 @@ void play::cpGetScore()
 
 void play::gameover()
 {
+    nextbg->raise();
+    nexttext->raise();
+    nexttext->setText("回合结束");
+    nextbg->show();
+    nexttext->show();
+    QTimer::singleShot(1000,[this](){
+        nextbg->hide();
+        nexttext->hide();
+        while(Score>0&&CPScore>0)
+        {
+            Score--;
+            CPScore--;
+            score->setText(QString::number(Score));
+            cpscore->setText(QString::number(CPScore));
+            this->repaint();
+        }
+        if(Score+CPScore)
+        {
+            pk->raise();
+            pk->show();
+            pkgif->start();
+            QTimer::singleShot(3000,this,&play::pkstop);
+        }
+        else
+        {
+            nextbg->raise();
+            nexttext->raise();
+            nexttext->setText("平局");
+            nextbg->show();
+            nexttext->show();
+            step->setText(QString::number(Step));
+            cpstep->setText(QString::number(CPStep));
+            QTimer::singleShot(1000,[this](){
+                nextbg->hide();
+                nexttext->hide();
+                nextgame();
+            });
+        }
+    });
 
 }
+
+void play::pkstop()
+{
+    pkgif->stop();
+    pk->hide();
+    score->setText("0");
+    cpscore->setText("0");
+    if(Score)
+    {
+        if(CPHP)
+        {
+            Score+=10;
+            while(Score)
+            {
+                if(CPHP)
+                {
+                    CPHP--;
+                    cphptext->setText(QString::number(CPHP)+"/300");
+                    cphp->setGeometry(1165-CPHP/2,101,CPHP/2,19);
+                    this->repaint();
+                }
+                Score--;
+            }
+            nextgame();
+        }
+        else win();
+    }
+    else
+    {
+        if(HP)
+        {
+            CPScore+=10;
+            while(CPScore)
+            {
+                if(HP)
+                {
+                    HP--;
+                    hptext->setText(QString::number(HP)+"/300");
+                    hp->setGeometry(135,101,HP/2,19);
+                    this->repaint();
+                }
+                CPScore--;
+            }
+            nextgame();
+        }
+        else lose();
+    }
+}
+
+void play::win()
+{
+    QFont font("华文隶书",48);
+    wintext1->setFont(font);
+    wintext2->setFont(font);
+    wintext1->setStyleSheet("QLabel { color : rgb(59,43,32); }");
+    wintext2->setStyleSheet("QLabel { color : rgb(59,43,32); }");
+    wintext1->setText(QString::number(round));
+    wintext2->setText(QString::number(HP));
+    winbg->raise();
+    quitButton->raise();
+    winbg->show();
+    quitButton->show();
+    wintext1->raise();
+    wintext1->show();
+    wintext2->raise();
+    wintext2->show();
+}
+
+void play::lose()
+{
+    losebg->raise();
+    quitButton->raise();
+    losebg->show();
+    quitButton->show();
+}
+
+void play::nextgame()
+{
+    Step=18;
+    CPStep=18;
+    round++;
+    nextbg->raise();
+    nexttext->raise();
+    nexttext->setText("第"+QString::number(round)+"回合");
+    nextbg->show();
+    nexttext->show();
+    step->setText(QString::number(Step));
+    cpstep->setText(QString::number(CPStep));
+    QTimer::singleShot(1000,[this](){
+        nextbg->hide();
+        nexttext->hide();
+        timer->start();
+    });
+}
+
+void play::quit()
+{
+    qDebug()<<"1";
+    emit this->back();
+    //this->close();
+}
+
+void play::sendScore(){}

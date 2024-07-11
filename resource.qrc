@@ -39,5 +39,42 @@
         <file>bgm/dada.wav</file>
         <file>bgm/deleteRow.wav</file>
         <file>bgm/fall.wav</file>
+        <file>rc/lose.png</file>
+        <file>rc/next.png</file>
+        <file>rc/win.png</file>
+        <file>rc/quit.png</file>
+        <file>resorce/back.png</file>
+        <file>resorce/bg.png</file>
+        <file>resorce/Button_music.wav</file>
+        <file>resorce/icon.ico</file>
+        <file>resorce/intro1.png</file>
+        <file>resorce/intro2.png</file>
+        <file>resorce/intro3.png</file>
+        <file>resorce/intro4.png</file>
+        <file>resorce/music.wav</file>
+        <file>resorce/jiantouyou.png</file>
+        <file>resorce/jiantouyoujin.png</file>
+        <file>resorce/jiantouzuo.png</file>
+        <file>resorce/jiantouzuojin.png</file>
+        <file>resorce/bird1.png</file>
+        <file>resorce/bird1skill.png</file>
+        <file>resorce/bird2.png</file>
+        <file>resorce/bird2skill.png</file>
+        <file>resorce/bird3.png</file>
+        <file>resorce/bird3skill.png</file>
+        <file>resorce/bird4.png</file>
+        <file>resorce/bird4skill.png</file>
+        <file>resorce/bird5.png</file>
+        <file>resorce/bird5skill.png</file>
+        <file>resorce/kaituo.png</file>
+        <file>resorce/kaituojin.png</file>
+        <file>resorce/liuying.png</file>
+        <file>resorce/liuyingjin.png</file>
+        <file>resorce/sanyue.png</file>
+        <file>resorce/sanyuejin.png</file>
+        <file>resorce/yinlang.png</file>
+        <file>resorce/yinlangjin.png</file>
+        <file>resorce/zhigeng.png</file>
+        <file>resorce/zhigengjin.png</file>
     </qresource>
 </RCC>

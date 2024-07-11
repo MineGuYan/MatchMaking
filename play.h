@@ -11,6 +11,7 @@
 #include <QSoundEffect>
 #include <QUrl>
 #include <QTimer>
+#include <QMovie>
 
 namespace Ui {
 class play;
@@ -48,22 +49,33 @@ public:
     int CPStep=18;
     int HP=300;
     int CPHP=300;
-
+    int round=1;
     void draw();
     bool judgeStart();
     void gameover();
+    void win();
+    void lose();
+    void nextgame();
     virtual void cpGetScore();
+    virtual void sendScore();
     int Selected=-1;
     int matrix[7][7];
     int timeCount=0;
-    QLabel *score,*cpscore,*step,*cpstep,*hp,*cphp,*hptext,*cphptext,*skilltext,*cpavatar,*cprole;
+    QLabel *score,*cpscore,*step,*cpstep,*hp,*cphp,*hptext,*cphptext,*skilltext,*cpavatar,*cprole,*pk,*losebg,*winbg,*nextbg,*wintext1,*wintext2,*nexttext;
+    QMovie *pkgif;
 
 private slots:
     void swap(int);
     void cpplay();
+    void pkstop();
+    void quit();
+
+signals:
+    void back();
+
 private:
     Ui::play *ui;
-    QPushButton *fruit;
+    QPushButton *fruit,*quitButton;
     QTimer *timer;
     QString nor="QPushButton{background-color: transparent;border-radius: 10px;}";
     QString sel="QPushButton{background-color: rgb(85, 255, 127);border-radius: 10px;}";

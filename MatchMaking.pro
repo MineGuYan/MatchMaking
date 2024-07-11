@@ -17,11 +17,14 @@ SOURCES += \
     bird3.cpp \
     bird4.cpp \
     client.cpp \
+    intro.cpp \
     main.cpp \
     mainmenu.cpp \
     network.cpp \
     play.cpp \
-    server.cpp
+    server.cpp \
+    set_one.cpp \
+    set_two.cpp
 
 HEADERS += \
     bird0.h \
@@ -30,17 +33,23 @@ HEADERS += \
     bird3.h \
     bird4.h \
     client.h \
+    intro.h \
     mainmenu.h \
     network.h \
     play.h \
-    server.h
+    server.h \
+    set_one.h \
+    set_two.h
 
 FORMS += \
     client.ui \
+    intro.ui \
     mainmenu.ui \
     network.ui \
     play.ui \
-    server.ui
+    server.ui \
+    set_one.ui \
+    set_two.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

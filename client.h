@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QTcpSocket>
 #include <QHostAddress>
+#include <QMessageBox>>
 
 namespace Ui {
 class Client;
@@ -16,6 +17,11 @@ class Client : public QWidget
 public:
     explicit Client(QWidget *parent = nullptr);
     ~Client();
+    QTcpSocket *socket;
+
+signals:
+    void cancel();
+    void succeed();
 
 private slots:
     void on_connect_clicked();
@@ -24,7 +30,6 @@ private slots:
 
 private:
     Ui::Client *ui;
-    QTcpSocket *socket;
 };
 
 #endif // CLIENT_H

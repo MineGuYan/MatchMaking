@@ -63,12 +63,7 @@ play::play(QWidget *parent)
     CPRole=rand()%5;
     cpavatar->setGeometry(1165,70,80,80);
     cprole->setGeometry(970,230,230,270);
-    QPixmap pixmap1(":/rc/bird"+QString::number(CPRole)+".png");
-    pixmap1=pixmap1.scaled(80,80);
-    cpavatar->setPixmap(pixmap1);
-    QPixmap pixmap2(":/rc/role"+QString::number(CPRole)+".png");
-    pixmap2=pixmap2.scaled(270,270);
-    cprole->setPixmap(pixmap2);
+    drawCP();
     pkgif=new QMovie("D:\\Qt\\Project\\MatchMaking\\rc\\pk.gif");
     pk=new QLabel(this);
     pk->setGeometry(0,0,1280,720);
@@ -130,11 +125,6 @@ play::play(QWidget *parent)
     nexttext->show();
     step->setText(QString::number(Step));
     cpstep->setText(QString::number(CPStep));
-    QTimer::singleShot(1000,[this](){
-        nextbg->hide();
-        nexttext->hide();
-        timer->start(1000);
-    });
 }
 
 void play::Sound()
@@ -193,6 +183,7 @@ play::~play()
     delete nextbg;
     delete wintext1;
     delete wintext2;
+    if(network!=nullptr)delete network;
 }
 
 void play::draw()
@@ -247,6 +238,7 @@ void play::swap(int i)
                 matrix[ix][iy]=tem;
                 fruit[Selected].setStyleSheet(nor);
                 int vectorx=ix-sx,vectory=iy-sy;
+                bool flag;
                 for(int Distance=1;Distance<=40;Distance++)
                 {
                     fruit[i].move(365+ix*80-Distance*vectorx*2,85+iy*80-Distance*vectory*2);
@@ -309,11 +301,16 @@ void play::swap(int i)
                     }
                     fall();
                 }
-                else if(Judge())
+                else
                 {
-                    matrix[ix][iy]=matrix[sx][sy];
-                    matrix[sx][sy]=tem;
-                    Step++;
+                    flag=Judge();
+                    if(flag)
+                    {
+                        matrix[ix][iy]=matrix[sx][sy];
+                        matrix[sx][sy]=tem;
+                        Step++;
+                    }
+                    else sendScore();
                 }
                 Selected=-1;
                 draw();
@@ -327,7 +324,6 @@ void play::swap(int i)
         }
         score->setText(QString::number(Score));
         step->setText(QString::number(Step));
-        sendScore();
     }
 }
 
@@ -1014,19 +1010,23 @@ void play::fall()
 
 void play::cpplay()
 {
-    if(CPStep)
+    if(network==nullptr)
     {
-        if(timeCount==2)
+        if(CPStep)
         {
-            timeCount=0;
-            CPStep--;
-            cpstep->setText(QString::number(CPStep));
-            cpGetScore();
-            cpscore->setText(QString::number(CPScore));
+            if(timeCount==2)
+            {
+                timeCount=0;
+                CPStep--;
+                cpstep->setText(QString::number(CPStep));
+                CPScore+=3+rand()%60;
+                cpscore->setText(QString::number(CPScore));
+            }
+            else timeCount++;
         }
-        else timeCount++;
+
     }
-    else if(Step==0)
+    if(Step==0&&CPStep==0)
     {
         timer->stop();
         timeCount=0;
@@ -1036,7 +1036,24 @@ void play::cpplay()
 
 void play::cpGetScore()
 {
-    CPScore+=3+rand()%60;
+    QTcpSocket *s=(QTcpSocket*)sender();
+    if(first)
+    {
+        QString Role(s->readAll());
+        QPixmap pixmap1(":/rc/bird"+Role+".png");
+        pixmap1=pixmap1.scaled(80,80);
+        cpavatar->setPixmap(pixmap1);
+        QPixmap pixmap2(":/rc/role"+Role+".png");
+        pixmap2=pixmap2.scaled(270,270);
+        cprole->setPixmap(pixmap2);
+        first=false;
+    }
+    else
+    {
+        CPStep--;
+        cpstep->setText(QString::number(CPStep));
+        cpscore->setText(QString(s->readAll()));
+    }
 }
 
 void play::gameover()
@@ -1183,4 +1200,47 @@ void play::quit()
     this->close();
 }
 
-void play::sendScore(){}
+void play::sendScore()
+{
+    if(network!=nullptr)
+    {
+        if(network->client!=nullptr)
+        {
+            network->client->socket->write(QByteArray(QString::number(Score).toUtf8()));
+        }
+        else
+        {
+            network->server->socket->write(QByteArray(QString::number(Score).toUtf8()));
+        }
+    }
+}
+
+void play::gameStart()
+{
+    if(network!=nullptr)
+    {
+        if(network->client!=nullptr)
+        {
+            network->client->socket->write(QByteArray(QString::number(People).toUtf8()));
+        }
+        else
+        {
+            network->server->socket->write(QByteArray(QString::number(People).toUtf8()));
+        }
+    }
+    QTimer::singleShot(1000,[this](){
+        nextbg->hide();
+        nexttext->hide();
+        timer->start(1000);
+    });
+}
+
+void play::drawCP()
+{
+    QPixmap pixmap1(":/rc/bird"+QString::number(CPRole)+".png");
+    pixmap1=pixmap1.scaled(80,80);
+    cpavatar->setPixmap(pixmap1);
+    QPixmap pixmap2(":/rc/role"+QString::number(CPRole)+".png");
+    pixmap2=pixmap2.scaled(270,270);
+    cprole->setPixmap(pixmap2);
+}

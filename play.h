@@ -12,6 +12,8 @@
 #include <QUrl>
 #include <QTimer>
 #include <QMovie>
+#include <QByteArray>
+#include "network.h"
 
 namespace Ui {
 class play;
@@ -56,19 +58,23 @@ public:
     void win();
     void lose();
     void nextgame();
-    virtual void cpGetScore();
-    virtual void sendScore();
+    void gameStart();
+    void drawCP();
     int Selected=-1;
     int matrix[7][7];
     int timeCount=0;
+    bool first=true;
     QLabel *score,*cpscore,*step,*cpstep,*hp,*cphp,*hptext,*cphptext,*skilltext,*cpavatar,*cprole,*pk,*losebg,*winbg,*nextbg,*wintext1,*wintext2,*nexttext;
     QMovie *pkgif;
+    Network *network=nullptr;
 
-private slots:
+public slots:
     void swap(int);
     void cpplay();
     void pkstop();
     void quit();
+    void cpGetScore();
+    void sendScore();
 
 signals:
     void back();

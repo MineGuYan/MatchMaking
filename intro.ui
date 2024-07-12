@@ -91,10 +91,10 @@ border-radius: 10px;
    </property>
    <property name="styleSheet">
     <string notr="true">QPushButton{
-	border-image: url(:/resorce/箭头左.png);
+	border-image: url(:/resorce/jiantouzuo.png);
 }
 QPushButton:hover {
-	border-image: url(:/resorce/箭头左金.png);
+	border-image: url(:/resorce/jiantouzuojin.png);
 }</string>
    </property>
    <property name="text">
@@ -135,10 +135,10 @@ border-radius: 45px;
    </property>
    <property name="styleSheet">
     <string notr="true">QPushButton{
-	border-image: url(:/resorce/箭头右.png);
+	border-image: url(:/resorce/jiantouyou.png);
 }
 QPushButton:hover {
-	border-image: url(:/resorce/箭头右金.png);
+	border-image: url(:/resorce/jiantouyoujin.png);
 }</string>
    </property>
    <property name="text">

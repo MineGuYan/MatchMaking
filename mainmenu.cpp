@@ -57,13 +57,21 @@ MainMenu::MainMenu(QWidget *parent)
 
 void MainMenu::paintEvent(QPaintEvent *event){
     QPainter painter(this);
-    QPixmap pixmap(":/resorce/开始菜单.png");
+    QPixmap pixmap(":/resorce/menu.png");
     painter.drawPixmap(rect(), pixmap);
 }
 
 MainMenu::~MainMenu()
 {
     delete ui;
+    if(gamestart!=nullptr)delete gamestart;
+    delete intro;
+    delete set1;
+    delete set2;
+    delete soundEffect;
+    delete musicEffect;
+    delete music;
+    delete audioOutput;
 }
 
 void MainMenu::Music_Received(int number){
@@ -80,7 +88,6 @@ void MainMenu::on_Button_Singal_clicked()
 {
     soundEffect->play();
     this->hide();
-    if(gamestart!=nullptr)delete gamestart;
     switch(BirdId)
     {
     case 0:
@@ -107,7 +114,39 @@ void MainMenu::on_Button_Singal_clicked()
 void MainMenu::on_Button_Double_clicked()
 {
     soundEffect->play();
-    this->hide();
+    if(gamestart!=nullptr)delete gamestart;
+    switch(BirdId)
+    {
+    case 0:
+        gamestart=new bird0(1);
+        break;
+    case 1:
+        gamestart=new bird1(1);
+        break;
+    case 2:
+        gamestart=new bird2(1);
+        break;
+    case 3:
+        gamestart=new bird3(1);
+        break;
+    case 4:
+        gamestart=new bird4(1);
+        break;
+    }
+    connect(gamestart->network,&Network::cancel,[=](){gamestart->network->close();});
+    connect(gamestart->network,&Network::SStart,[=](){
+        this->hide();
+        connect(gamestart->network->server->socket,&QTcpSocket::readyRead,gamestart,&play::cpGetScore);
+        gamestart->show();
+        gamestart->gameStart();
+    });
+    connect(gamestart->network,&Network::CStart,[=](){
+        this->hide();
+        connect(gamestart->network->client->socket,&QTcpSocket::readyRead,gamestart,&play::cpGetScore);
+        gamestart->show();
+        gamestart->gameStart();
+    });
+    gamestart->network->show();   
 }
 
 

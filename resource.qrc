@@ -76,5 +76,6 @@
         <file>resorce/yinlangjin.png</file>
         <file>resorce/zhigeng.png</file>
         <file>resorce/zhigengjin.png</file>
+        <file>resorce/menu.png</file>
     </qresource>
 </RCC>

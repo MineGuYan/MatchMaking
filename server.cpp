@@ -9,7 +9,7 @@ Server::Server(QWidget *parent)
     this->setWindowTitle("等待客户端连接中");
     server=new QTcpServer;
     server->listen(QHostAddress::AnyIPv4,port);
-    connect(server,SIGNAL(QTcpServer::newConnection()),this,SLOT(Server::clientConnect()));
+    connect(server,&QTcpServer::newConnection,this,&Server::clientConnect);
 }
 
 Server::~Server()
@@ -21,6 +21,8 @@ Server::~Server()
 void Server::clientConnect()
 {
     socket=server->nextPendingConnection();
+    this->hide();
+    emit succeed();
 }
 void Server::on_cancle_clicked()
 {

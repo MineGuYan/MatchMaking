@@ -22,13 +22,19 @@ void Client::on_connect_clicked()
     QString port="25565";
     //QString port=ui->PortLine->text();
     socket->connectToHost(QHostAddress(IP),port.toShort());
-    connect(socket,SIGNAL(TcpSocket::connected()),this,SLOT(on_pushButton_2_clicked()));
-    connect(socket,SIGNAL(TcpSocket::disconnected()),this,SLOT(on_pushButton_2_clicked()));
+    connect(socket,&QTcpSocket::connected,this,[this](){
+        this->hide();
+        emit succeed();
+    });
+    connect(socket,&QTcpSocket::disconnected,this,[this](){
+        QMessageBox::warning(this,"连接提示","网络断开");
+    });
 }
 
 
 void Client::on_cancel_clicked()
 {
     this->close();
+    emit cancel();
 }
 

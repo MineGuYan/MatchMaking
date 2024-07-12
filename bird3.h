@@ -7,6 +7,7 @@ class bird3 : public play
 {
 public:
     bird3();
+    bird3(int);
     ~bird3();
     void Skill();
     QLabel *avatar,*role,*skill;

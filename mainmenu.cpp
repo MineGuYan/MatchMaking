@@ -62,7 +62,7 @@ MainMenu::MainMenu(QWidget *parent)
 
 void MainMenu::paintEvent(QPaintEvent *event){
     QPainter painter(this);
-    QPixmap pixmap(":/resorce/开始菜单.png");
+    QPixmap pixmap("D:\\GitHubRemoteRepositories\\MatchMaking\\resorce\\开始菜单.png");
     painter.drawPixmap(rect(), pixmap);
 }
 

@@ -135,7 +135,7 @@ play::play(QWidget *parent)
         nexttext->hide();
         timer->start(1000);
     });
-    win();
+    //win();
 }
 
 void play::Sound()

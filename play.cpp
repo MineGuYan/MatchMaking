@@ -135,7 +135,6 @@ play::play(QWidget *parent)
         nexttext->hide();
         timer->start(1000);
     });
-    win();
 }
 
 void play::Sound()
@@ -1180,9 +1179,8 @@ void play::nextgame()
 
 void play::quit()
 {
-    qDebug()<<"1";
     emit this->back();
-    //this->close();
+    this->close();
 }
 
 void play::sendScore(){}

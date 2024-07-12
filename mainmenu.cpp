@@ -53,11 +53,6 @@ MainMenu::MainMenu(QWidget *parent)
     });
     connect(this->set2, &Set_two::Music_1, this, &MainMenu::Music_Received);
     connect(this->set2, &Set_two::Music_2, this, &MainMenu::MusicEffect_Received);
-
-    connect(this->gamestart,&play::back,this,[=](){
-        qDebug()<<"2";
-        this->show();
-    });
 }
 
 void MainMenu::paintEvent(QPaintEvent *event){
@@ -104,6 +99,7 @@ void MainMenu::on_Button_Singal_clicked()
         gamestart=new bird4;
         break;
     }
+    connect(this->gamestart,&play::back,[=](){this->show();});
     gamestart->show();
 }
 
@@ -137,4 +133,3 @@ void MainMenu::on_Button_Set_two_clicked()
     this->hide();
     this->set2->show();
 }
-
